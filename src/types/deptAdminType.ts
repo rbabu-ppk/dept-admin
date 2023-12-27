@@ -32,6 +32,10 @@ export interface TableProps {
   data: Data[];
 }
 
+export interface ValidationErrors {
+  [key: string]: string;
+}
+
 export interface AddFormData {
   firstname: string;
   middlename: string;

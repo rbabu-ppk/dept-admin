@@ -1,4 +1,4 @@
-import React, { FormEvent } from "react";
+import React, { FormEvent, useContext } from "react";
 import {
   TextField,
   Checkbox,
@@ -9,10 +9,14 @@ import {
   Box,
   Typography,
   Grid,
+  Divider,
 } from "@mui/material";
 import * as api from "../services/apiServices";
 import { AddFormData, Errors } from "../types/deptAdminType";
 import Layout from "../components/layouts/Layout";
+import MyContext from "../context/context";
+import { useNavigate } from "react-router-dom";
+import { validateForm } from "../validations/formValidate";
 
 const Add = () => {
   const [formData, setFormData] = React.useState<AddFormData>({
@@ -27,62 +31,42 @@ const Add = () => {
   });
 
   const [errors, setErrors] = React.useState<Errors>({});
+  const { token } = useContext(MyContext);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
     setFormData((prevData) => ({
       ...prevData,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
 
-  const validateForm = () => {
-    const errors = {};
-
-    if (!formData.firstname.trim()) {
-      errors.firstname = "First Name is required";
-    }
-
-    if (!formData.middlename.trim()) {
-      errors.middlename = "Middle Name is required";
-    }
-
-    if (!formData.lastname.trim()) {
-      errors.lastname = "Last Name is required";
-    }
-
-    if (!formData.email.trim()) {
-      errors.email = "Email is required";
-    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      errors.email = "Invalid email address";
-    }
-
-    if (!formData.loginsso) {
-      if (!formData.password.trim()) {
-        errors.password = "New Password is required";
-      }
-      if (!formData.repeatPassword.trim()) {
-        errors.repeatPassword = "Repeat Password is required";
-      } else if (formData.password !== formData.repeatPassword) {
-        errors.repeatPassword = "Passwords do not match";
-      }
-    }
-
-    setErrors(errors);
-
-    return Object.keys(errors).length === 0;
-  };
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const { repeatPassword, ...formDataWithoutRepeatPassword } = formData;
-    try {
-      const result = await api.createData(formDataWithoutRepeatPassword);
-      console.log("Data Created", result);
-    } catch (error) {
-      console.log(error);
+    const errors = validateForm(formData);
+
+    if (Object.keys(errors).length === 0) {
+      const { repeatPassword, ...formDataWithoutRepeatPassword } = formData;
+      try {
+        const result = await api.createData(
+          formDataWithoutRepeatPassword,
+          token
+        );
+        console.log("Data Created", result);
+        navigate("/table");
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      // Update state with validation errors
+      setErrors(errors);
     }
   };
+  const isSubmitDisabled = Object.values(formData).some(
+    (value) => value === ""
+  );
 
   return (
     <Layout>
@@ -90,7 +74,7 @@ const Add = () => {
         <Typography variant="h5" align="center" mb={3}>
           Depart Admin Add Form
         </Typography>
-
+        <Divider />
         <Grid container spacing={2}>
           <Grid item xs={12} sm={4}>
             <FormControl fullWidth>
@@ -217,7 +201,7 @@ const Add = () => {
               </Grid>
             </>
           )}
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={12}>
             <FormControl fullWidth>
               <Typography variant="body2" mb={1}>
                 Is Instructor
@@ -237,13 +221,14 @@ const Add = () => {
               </FormGroup>
             </FormControl>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={1}>
             <FormControl fullWidth>
               <Button
                 type="submit"
                 variant="contained"
                 color="primary"
                 fullWidth
+                disabled={isSubmitDisabled}
               >
                 Submit
               </Button>

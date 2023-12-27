@@ -26,7 +26,7 @@ const PageNotFound: React.FC = () => {
         </Typography>
         <Button
           component={Link}
-          to="/"
+          to="/dashboard"
           variant="contained"
           color="primary"
           sx={{ marginTop: 2 }}

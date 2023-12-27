@@ -161,7 +161,7 @@ export default function MiniDrawer() {
         </List> */}
         <List>
           {[
-            { text: "Dashboard", icon: <InboxIcon />, link: "/" },
+            { text: "Dashboard", icon: <InboxIcon />, link: "/dashboard" },
             {
               text: "Department Admin",
               icon: <MailIcon />,
