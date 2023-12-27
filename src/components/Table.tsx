@@ -38,7 +38,7 @@ console.log(datas);
     const fetchData = async () => {
       try {
         const response = await axios.get('https://dev-admin.sunrises.io/api/get-departadmins', {headers:{
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjU4YTZmOTNhMGI4OTk2Y2ZiMTIxYTAwIiwidXVpZCI6ImU5MGRhZTliLTQ0MGUtNGI4ZC1iNDk4LTg1YzM3NTlhZGZiZiIsInBhc3N3b3JkX2V4cGlyZWQiOmZhbHNlLCJpYXQiOjE3MDM1ODY3MDksImV4cCI6MTcwMzU5NjcwOX0.hJ0mjEObJj9vUJ48utJNRVGFF_v0zKZE6B5hRD7hJqo',
+          // 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjU4YTZmOTNhMGI4OTk2Y2ZiMTIxYTAwIiwidXVpZCI6IjQzNzUyYmZhLWQ5NjItNGRiZS04Mzk5LWMxYmM2MTRhOWFiMyIsInBhc3N3b3JkX2V4cGlyZWQiOmZhbHNlLCJpYXQiOjE3MDM2MDgyODYsImV4cCI6MTcwMzYxODI4Nn0.OUcRjvUO6UgwJldgiEuYnG5fglxsUHKLUtldsnUOAkg',
         }});
         const formattedData = Object.values(response.data).map((obj) => ({
           id: obj._id,

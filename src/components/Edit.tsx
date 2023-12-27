@@ -1,5 +1,4 @@
-import React from 'react';
-import { useFormik } from 'formik';
+import React, { useEffect, useState } from 'react';
 import {
   TextField,
   Checkbox,
@@ -7,141 +6,221 @@ import {
   FormControlLabel,
   FormGroup,
   Button,
+  Box,
+  Typography,
+  Grid,
 } from '@mui/material';
+import axios from 'axios';
 
-const Edit: React.FC = () => {
-  const formik = useFormik({
-    initialValues: {
-      firstName: '',
-      middleName: '',
-      lastName: '',
-      email: '',
-      loginUsingSSO: false,
-      newPassword: '',
-      repeatPassword: '',
-      isInstructor: false,
-    },
-    onSubmit: (values) => {
-      console.log('Form submitted with values:', values);
-    },
+const Add = () => {
+  const [datas, setDatas] = useState([]);
+  const [formData, setFormData] = React.useState({
+    firstname: '',
+    middlename: '',
+    lastname: '',
+    email: '',
+    loginsso: false,
+    password: '',
+    repeatPassword: '',
+    instructor: false,
   });
 
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
+
+  
+console.log(datas);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`https://dev-admin.sunrises.io/api/get-departadmin-withid?_id=${id}`, {headers:{
+          // 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjU4YTZmOTNhMGI4OTk2Y2ZiMTIxYTAwIiwidXVpZCI6IjQzNzUyYmZhLWQ5NjItNGRiZS04Mzk5LWMxYmM2MTRhOWFiMyIsInBhc3N3b3JkX2V4cGlyZWQiOmZhbHNlLCJpYXQiOjE3MDM2MDgyODYsImV4cCI6MTcwMzYxODI4Nn0.OUcRjvUO6UgwJldgiEuYnG5fglxsUHKLUtldsnUOAkg',
+        }});
+        const formattedData = Object.values(response.data).map((obj) => ({
+          id: obj._id,
+          ...obj,
+        }));
+        setDatas(formattedData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    console.log('Form submitted with data:', formData);
+
+
+    try {
+      const response = await axios.post('https://dev-admin.sunrises.io/api/create-departadmin', formData, {
+        headers: {
+          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjU4YTZmOTNhMGI4OTk2Y2ZiMTIxYTAwIiwidXVpZCI6IjQzNzUyYmZhLWQ5NjItNGRiZS04Mzk5LWMxYmM2MTRhOWFiMyIsInBhc3N3b3JkX2V4cGlyZWQiOmZhbHNlLCJpYXQiOjE3MDM2MDgyODYsImV4cCI6MTcwMzYxODI4Nn0.OUcRjvUO6UgwJldgiEuYnG5fglxsUHKLUtldsnUOAkg"
+        },
+      });
+      console.log('Server response:', response.data);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
+  };
+
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <FormControl>
-        <TextField
-          label="First Name"
-          id="firstName"
-          name="firstName"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.firstName}
-        />
-      </FormControl>
+    <form onSubmit={handleSubmit}>
+      <Typography variant="h5" align="center" mb={3}>
+        Depart Admin Edit Form
+      </Typography>
 
-      <FormControl>
-        <TextField
-          label="Middle Name"
-          id="middleName"
-          name="middleName"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.middleName}
-        />
-      </FormControl>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={4}>
+          <FormControl fullWidth>
+            <Typography variant="body2" mb={1}>
+              First Name
+            </Typography>
+            <TextField
+              id="firstName"
+              name="firstname"
+              value={formData.firstname}
+              onChange={handleChange}
+              fullWidth
+            />
+          </FormControl>
+        </Grid>
 
-      <FormControl>
+        <Grid item xs={12} sm={4}>
+          <FormControl fullWidth>
+            <Typography variant="body2" mb={1}>
+              Middle Name
+            </Typography>
+            <TextField
+              id="middleName"
+              name="middlename"
+              value={formData.middlename}
+              onChange={handleChange}
+              fullWidth
+            />
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <FormControl fullWidth>
+            <Typography variant="body2" mb={1}>
+              Last Name
+            </Typography>
+            <TextField
+              id="middleName"
+              name="lastname"
+              value={formData.lastname}
+              onChange={handleChange}
+              fullWidth
+            />
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+        <FormControl fullWidth mb={2}>
+        <Typography variant="body2" mb={1}>
+          Email
+        </Typography>
         <TextField
-          label="Last Name"
-          id="lastName"
-          name="lastName"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.lastName}
-        />
-      </FormControl>
-
-      <FormControl>
-        <TextField
-          label="Email"
           type="email"
           id="email"
           name="email"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.email}
+          value={formData.email}
+          onChange={handleChange}
+          fullWidth
         />
       </FormControl>
-
-      <FormControl>
+      </Grid>
+      <Grid item xs={12} sm={4}>
+      <FormControl fullWidth mb={2}>
+        <Typography variant="body2" mb={1}>
+          Login Using SSO
+        </Typography>
         <FormGroup>
           <FormControlLabel
             control={
               <Checkbox
-                id="loginUsingSSO"
-                name="loginUsingSSO"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                checked={formik.values.loginUsingSSO}
+                id="loginsso"
+                name="loginsso"
+                checked={formData.loginsso}
+                onChange={handleChange}
               />
             }
-            label="Login Using SSO"
+            label="Enable SSO"
           />
         </FormGroup>
       </FormControl>
+</Grid>
 
-      {formik.values.loginUsingSSO === false && (
+      {!formData.loginsso && (
         <>
-          <FormControl>
+         <Grid item xs={12} sm={6}>
+          <FormControl fullWidth mb={2}>
+            <Typography variant="body2" mb={1}>
+              New Password
+            </Typography>
             <TextField
-              label="New Password"
               type="password"
               id="newPassword"
-              name="newPassword"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.newPassword}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              fullWidth
             />
           </FormControl>
-
-          <FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+          <FormControl fullWidth mb={2}>
+            <Typography variant="body2" mb={1}>
+              Repeat Password
+            </Typography>
             <TextField
-              label="Repeat Password"
               type="password"
               id="repeatPassword"
               name="repeatPassword"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.repeatPassword}
+              value={formData.repeatPassword}
+              onChange={handleChange}
+              fullWidth
             />
           </FormControl>
+          </Grid>
         </>
       )}
-
-      <FormControl>
+ <Grid item xs={12} sm={6}>
+      <FormControl fullWidth mb={2}>
+        <Typography variant="body2" mb={1}>
+          Is Instructor
+        </Typography>
         <FormGroup>
           <FormControlLabel
             control={
               <Checkbox
                 id="isInstructor"
-                name="isInstructor"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                checked={formik.values.isInstructor}
+                name="instructor"
+                checked={formData.instructor}
+                onChange={handleChange}
               />
             }
-            label="Is Instructor"
+            label="Yes, I am an instructor"
           />
         </FormGroup>
       </FormControl>
-
-      <FormControl>
-        <Button type="submit" variant="contained" color="primary">
-          Submit
-        </Button>
-      </FormControl>
+      </Grid>
+        <Grid item xs={12}>
+          <FormControl fullWidth mb={2}>
+            <Button type="submit" variant="contained" color="primary" fullWidth>
+              Submit
+            </Button>
+          </FormControl>
+        </Grid>
+      </Grid>
     </form>
   );
 };
 
-export default Edit;
+export default Add;
