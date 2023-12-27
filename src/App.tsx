@@ -1,12 +1,12 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Table from "./components/Table";
-import Add from "./components/Add";
-import Edit from "./components/Edit";
+import Table from "./components/pages/Table";
+import Add from "./components/pages/Add";
+import Edit from "./components/pages/Edit";
 import React, { useContext, useState } from "react";
 import Dashboard from "./components/dashboard/Dashboard";
-import PageNotFound from "./components/pages/PageNotFound";
-import Login from "./components/pages/Login";
+import PageNotFound from "./components/auth/PageNotFound";
+import Login from "./components/auth/Login";
 import MyContext from "./context/context";
 
 export const useAuth = () => {

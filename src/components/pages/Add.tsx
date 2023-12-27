@@ -11,12 +11,12 @@ import {
   Grid,
   Divider,
 } from "@mui/material";
-import * as api from "../services/apiServices";
-import { AddFormData, Errors } from "../types/deptAdminType";
-import Layout from "../components/layouts/Layout";
-import MyContext from "../context/context";
+import * as api from "../../services/apiServices";
+import { AddFormData, Errors } from "../../types/deptAdminType";
+import Layout from "../layouts/Layout";
+import MyContext from "../../context/context";
 import { useNavigate } from "react-router-dom";
-import { validateForm } from "../validations/formValidate";
+import { validateForm } from "../../validations/formValidate";
 
 const Add = () => {
   const [formData, setFormData] = React.useState<AddFormData>({

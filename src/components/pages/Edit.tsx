@@ -12,12 +12,12 @@ import {
   Divider,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import * as api from "../services/apiServices";
-import { Errors } from "../types/deptAdminType";
-import { FormData } from "../types/deptAdminType";
-import Layout from "./layouts/Layout";
-import MyContext from "../context/context";
-import { validateForm } from "../validations/formValidate";
+import * as api from "../../services/apiServices";
+import { Errors } from "../../types/deptAdminType";
+import { FormData } from "../../types/deptAdminType";
+import Layout from "../layouts/Layout";
+import MyContext from "../../context/context";
+import { validateForm } from "../../validations/formValidate";
 
 const Add = () => {
   const { selectedId } = useParams();

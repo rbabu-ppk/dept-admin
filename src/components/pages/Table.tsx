@@ -2,9 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
-import * as api from "../services/apiServices";
-import Layout from "./layouts/Layout";
-import MyContext from "../context/context";
+import * as api from "../../services/apiServices";
+import Layout from "../layouts/Layout";
+import MyContext from "../../context/context";
 
 const columns: GridColDef[] = [
   { field: "firstname", headerName: "First Name", flex: 1 },
