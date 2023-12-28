@@ -8,6 +8,7 @@ import Dashboard from "./components/dashboard/Dashboard";
 import PageNotFound from "./components/auth/PageNotFound";
 import Login from "./components/auth/Login";
 import MyContext from "./context/context";
+import MyForm from "./components/auth/MyForm";
 
 export const useAuth = () => {
   return useContext(MyContext);
@@ -44,6 +45,7 @@ const App: React.FC = () => {
               <Route path="/table" element={<Table />}></Route>
               <Route path="/add" element={<Add />}></Route>
               <Route path="/edit/:selectedId" element={<Edit />}></Route>
+              <Route path="/test" element={<MyForm />}></Route>
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </BrowserRouter>

@@ -5,6 +5,8 @@ import Button from "@mui/material/Button";
 import * as api from "../../services/apiServices";
 import Layout from "../layouts/Layout";
 import MyContext from "../../context/context";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
 
 const columns: GridColDef[] = [
   { field: "firstname", headerName: "First Name", flex: 1 },
@@ -58,19 +60,29 @@ const Table: React.FC = () => {
 
   return (
     <Layout>
+      <Typography variant="h5" align="center" mb={3}>
+        Department Admins
+      </Typography>
+      <Divider />
       <div style={{ height: 400, width: "100%" }}>
         <Button component={Link} to="/add" variant="contained" color="primary">
           Add Department Admin
         </Button>
         <Button
           component={Link}
-          to={`/edit/${selectedId}`}
+          to={selectedId ? `/edit/${selectedId}` : "#"}
           variant="contained"
           color="primary"
+          disabled={!selectedId}
         >
           Edit Department Admin
         </Button>
-        <Button onClick={handleDelete} variant="contained" color="primary">
+        <Button
+          onClick={handleDelete}
+          variant="contained"
+          color="primary"
+          disabled={!selectedId}
+        >
           Delete Department Admin
         </Button>
 

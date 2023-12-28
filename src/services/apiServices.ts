@@ -3,11 +3,12 @@ import axios from "axios";
 import { AddFormData } from "../types/deptAdminType";
 import { useAuth } from "../App";
 
-const url = "https://dev-admin.sunrises.io/api";
+const baseUrl = "https://dev-admin.sunrises.io/api";
 
 export const createData = async (data: AddFormData, token: string) => {
   try {
-    const response = await axios.post(url + "/create-departadmin", data, {
+    const url = `${baseUrl}/create-departadmin`;
+    const response = await axios.post(url, data, {
       headers: {
         Authorization: `${token}`,
       },
@@ -21,7 +22,7 @@ export const createData = async (data: AddFormData, token: string) => {
 export const showIdData = async (id: string, token: string) => {
   try {
     const response = await axios.get(
-      url + `/get-departadmin-withid?_id=${id}`,
+      baseUrl + `/get-departadmin-withid?_id=${id}`,
       {
         headers: {
           Authorization: `${token}`,
@@ -36,7 +37,7 @@ export const showIdData = async (id: string, token: string) => {
 
 export const showData = async (token: string) => {
   try {
-    const response = await axios.get(url + "/get-departadmins", {
+    const response = await axios.get(baseUrl + "/get-departadmins", {
       headers: {
         Authorization: `${token}`,
       },
@@ -49,7 +50,7 @@ export const showData = async (token: string) => {
 
 export const updateData = async (data: FormData, token: string) => {
   try {
-    const response = await axios.put(url + `/edit-departadmin`, data, {
+    const response = await axios.put(baseUrl + `/edit-departadmin`, data, {
       headers: {
         Authorization: `${token}`,
       },
@@ -62,11 +63,14 @@ export const updateData = async (data: FormData, token: string) => {
 
 export const deleteData = async (id: string, token: string) => {
   try {
-    const response = await axios.delete(url + `/delete-departadmin?_id=${id}`, {
-      headers: {
-        Authorization: `${token}`,
-      },
-    });
+    const response = await axios.delete(
+      baseUrl + `/delete-departadmin?_id=${id}`,
+      {
+        headers: {
+          Authorization: `${token}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.log(error);

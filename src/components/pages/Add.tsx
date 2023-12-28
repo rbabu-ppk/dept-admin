@@ -30,13 +30,81 @@ const Add = () => {
     instructor: false,
   });
 
-  const [errors, setErrors] = React.useState<Errors>({});
+  const [errors, setErrors] = React.useState<Errors>({
+    firstname: "",
+    middlename: "",
+    lastname: "",
+    email: "",
+    // loginsso: "",
+    password: "",
+    repeatPassword: "",
+    // instructor: "",
+  });
+
+  const [isFormValid, setIsFormValid] = React.useState(false);
+
   const { token } = useContext(MyContext);
   const navigate = useNavigate();
+
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors: Errors = {
+      firstname: "",
+      middlename: "",
+      lastname: "",
+      email: "",
+      password: "",
+      repeatPassword: "",
+    };
+    if (formData.firstname.trim() === "") {
+      newErrors.firstname = "First name is required";
+      isValid = false;
+    }
+    if (formData.lastname.trim() === "") {
+      newErrors.lastname = "Last name is required";
+      isValid = false;
+    }
+    if (formData.middlename.trim() === "") {
+      newErrors.middlename = "Middle name is required";
+      isValid = false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      newErrors.email = "Invalid email address";
+      isValid = false;
+    }
+
+    if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters long";
+      isValid = false;
+    }
+    if (formData.password !== formData.repeatPassword) {
+      newErrors.repeatPassword = "Password mismatch";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    setIsFormValid(isValid);
+    return isValid;
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+
+    validateForm();
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+    const errors = validateForm(formData);
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: type === "checkbox" ? checked : value,
@@ -47,26 +115,15 @@ const Add = () => {
     e.preventDefault();
     const errors = validateForm(formData);
 
-    if (Object.keys(errors).length === 0) {
-      const { repeatPassword, ...formDataWithoutRepeatPassword } = formData;
-      try {
-        const result = await api.createData(
-          formDataWithoutRepeatPassword,
-          token
-        );
-        console.log("Data Created", result);
-        navigate("/table");
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      // Update state with validation errors
-      setErrors(errors);
+    const { repeatPassword, ...formDataWithoutRepeatPassword } = formData;
+    try {
+      const result = await api.createData(formDataWithoutRepeatPassword, token);
+      console.log("Data Created", result);
+      navigate("/table");
+    } catch (error) {
+      console.log(error);
     }
   };
-  const isSubmitDisabled = Object.values(formData).some(
-    (value) => value === ""
-  );
 
   return (
     <Layout>
@@ -228,7 +285,7 @@ const Add = () => {
                 variant="contained"
                 color="primary"
                 fullWidth
-                disabled={isSubmitDisabled}
+                disabled={!isFormValid}
               >
                 Submit
               </Button>

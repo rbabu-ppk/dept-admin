@@ -1,18 +1,22 @@
 import { ValidationErrors } from "../types/deptAdminType";
 
 export const validateForm = (formData: any): ValidationErrors => {
+  let isValid = true;
   const errors: ValidationErrors = {};
 
   if (!formData.firstname) {
     errors.firstname = "First name is required";
+    isValid = false;
   }
 
   if (!formData.lastname) {
     errors.lastname = "Last name is required";
+    isValid = false;
   }
 
   if (!formData.middlename) {
     errors.middlename = "Middle name is required";
+    isValid = false;
   }
 
   if (!formData.email) {

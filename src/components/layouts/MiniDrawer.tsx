@@ -19,6 +19,7 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { Link } from "react-router-dom";
+import Button from "@mui/material/Button";
 
 const drawerWidth = 240;
 
@@ -122,6 +123,11 @@ export default function MiniDrawer() {
           <Typography variant="h6" noWrap component="div">
             Department Admin
           </Typography>
+          <div className="logout">
+            <Button component={Link} to="/" variant="contained" color="primary">
+              Logout
+            </Button>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
