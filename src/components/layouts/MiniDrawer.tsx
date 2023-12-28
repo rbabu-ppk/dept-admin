@@ -141,30 +141,7 @@ export default function MiniDrawer() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        {/* <List>
-          {["Dashboard", "Department Admin"].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List> */}
+
         <List>
           {[
             { text: "Dashboard", icon: <InboxIcon />, link: "/dashboard" },
@@ -174,7 +151,7 @@ export default function MiniDrawer() {
               link: "/table",
             },
             // Add more items as needed
-          ].map(({ text, icon, link }, index) => (
+          ].map(({ text, icon, link }) => (
             <ListItem key={text} disablePadding sx={{ display: "block" }}>
               <ListItemButton
                 component={Link}

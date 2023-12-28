@@ -4,12 +4,8 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 
-const Login: React.FC = ({
-  sendToken,
-}: {
-  sendToken: (token: string) => void;
-}) => {
-  const [token, setToken] = useState<string | null>(null); // Specify the type of token as string
+const Login = ({ sendToken }: { sendToken: (token: string) => void }) => {
+  const [token, setToken] = useState<string>("");
   const navigate = useNavigate();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setToken(event.target.value);
@@ -17,8 +13,10 @@ const Login: React.FC = ({
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    sendToken(token);
-    navigate("/table");
+    if (token) {
+      sendToken(token);
+    }
+    navigate("/dashboard");
   };
 
   return (
@@ -39,7 +37,13 @@ const Login: React.FC = ({
             value={token || ""}
             onChange={handleChange}
           />
-          <Button type="submit" variant="contained" color="primary" fullWidth>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            disabled={token === ""}
+            fullWidth
+          >
             Login
           </Button>
         </Grid>

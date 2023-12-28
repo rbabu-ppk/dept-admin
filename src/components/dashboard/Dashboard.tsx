@@ -3,9 +3,6 @@ import Paper from "@mui/material/Paper";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Layout from "../layouts/Layout";
-import Diversity3Icon from "@mui/icons-material/Diversity3";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import { useContext, useEffect } from "react";
 import * as api from "../../services/apiServices";
@@ -15,9 +12,15 @@ import { Link as RouterLink } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import HomeIcon from "@mui/icons-material/Home";
 
+interface MyItem {
+  redirectLink: string;
+  count: number;
+  name: string;
+}
+
 const Dashboard = () => {
   const { token } = useContext(MyContext);
-  const [data, setData] = React.useState([]);
+  const [data, setData] = React.useState<MyItem[]>([]);
   console.log(data);
 
   useEffect(() => {
@@ -41,7 +44,7 @@ const Dashboard = () => {
         </Typography>
         <Divider />
         <Grid container spacing={2}>
-          {data.map((item, index) => (
+          {data.map((item) => (
             <Grid item xs={4}>
               <Paper
                 elevation={3}

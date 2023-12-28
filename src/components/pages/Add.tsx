@@ -6,7 +6,6 @@ import {
   FormControlLabel,
   FormGroup,
   Button,
-  Box,
   Typography,
   Grid,
   Divider,
@@ -16,7 +15,6 @@ import { AddFormData, Errors } from "../../types/deptAdminType";
 import Layout from "../layouts/Layout";
 import MyContext from "../../context/context";
 import { useNavigate } from "react-router-dom";
-import { validateForm } from "../../validations/formValidate";
 
 const Add = () => {
   const [formData, setFormData] = React.useState<AddFormData>({
@@ -89,7 +87,7 @@ const Add = () => {
     return isValid;
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
     setFormData({
@@ -100,20 +98,8 @@ const Add = () => {
     validateForm();
   };
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
-    const errors = validateForm(formData);
-
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const errors = validateForm(formData);
 
     const { repeatPassword, ...formDataWithoutRepeatPassword } = formData;
     try {
@@ -141,6 +127,7 @@ const Add = () => {
               <TextField
                 id="firstName"
                 name="firstname"
+                size="small"
                 value={formData.firstname}
                 onChange={handleChange}
                 fullWidth
@@ -157,6 +144,7 @@ const Add = () => {
               </Typography>
               <TextField
                 id="middleName"
+                size="small"
                 name="middlename"
                 value={formData.middlename}
                 onChange={handleChange}
@@ -173,6 +161,7 @@ const Add = () => {
               </Typography>
               <TextField
                 id="middleName"
+                size="small"
                 name="lastname"
                 value={formData.lastname}
                 onChange={handleChange}
@@ -191,6 +180,7 @@ const Add = () => {
                 type="email"
                 id="email"
                 name="email"
+                size="small"
                 value={formData.email}
                 onChange={handleChange}
                 fullWidth
@@ -210,6 +200,7 @@ const Add = () => {
                     <Checkbox
                       id="loginsso"
                       name="loginsso"
+                      size="small"
                       checked={formData.loginsso}
                       onChange={handleChange}
                     />
@@ -231,6 +222,7 @@ const Add = () => {
                     type="password"
                     id="newPassword"
                     name="password"
+                    size="small"
                     value={formData.password}
                     onChange={handleChange}
                     fullWidth
@@ -246,6 +238,7 @@ const Add = () => {
                   </Typography>
                   <TextField
                     type="password"
+                    size="small"
                     id="repeatPassword"
                     name="repeatPassword"
                     value={formData.repeatPassword}
@@ -269,6 +262,7 @@ const Add = () => {
                     <Checkbox
                       id="isInstructor"
                       name="instructor"
+                      size="small"
                       checked={formData.instructor}
                       onChange={handleChange}
                     />

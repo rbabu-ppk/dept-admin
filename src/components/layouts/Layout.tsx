@@ -1,9 +1,9 @@
-import React from "react";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import MiniDrawer from "./MiniDrawer";
+import { ReactNode } from "react";
 
-const Layout = ({ children }) => {
+const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />

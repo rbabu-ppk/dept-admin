@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import * as api from "../../services/apiServices";
 import Layout from "../layouts/Layout";
@@ -17,15 +17,14 @@ const columns: GridColDef[] = [
 ];
 
 const Table: React.FC = () => {
-  const [datas, setDatas] = useState([]);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [selectionModel, setSelectionModel] = React.useState([]);
+  const [datas, setDatas] = useState<any[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  // const [selectionModel, setSelectionModel] = React.useState([]);
 
-  const navigate = useNavigate();
   const { token } = useContext(MyContext);
 
-  const handleCellClick = (params) => {
-    const id = params.row.id;
+  const handleCellClick = (params: { row: { id: string } }) => {
+    const id: string = params.row.id;
     setSelectedId(id);
   };
 
@@ -33,7 +32,7 @@ const Table: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await api.showData(token);
-        const formattedData = Object.values(response).map((obj) => ({
+        const formattedData = Object.values(response).map((obj: any) => ({
           id: obj._id,
           ...obj,
         }));
@@ -49,10 +48,12 @@ const Table: React.FC = () => {
     if (!selectedId) {
       return;
     }
-
     try {
       await api.deleteData(selectedId, token);
-      window.location.reload();
+      setDatas((prevDatas) =>
+        prevDatas.filter((data) => data.id !== selectedId)
+      );
+      setSelectedId(null);
     } catch (error) {
       console.log(error);
     }
@@ -89,12 +90,12 @@ const Table: React.FC = () => {
         <DataGrid
           rows={datas}
           columns={columns}
-          pageSize={10}
-          disableSelectionOnClick
-          selectionModel={selectionModel}
-          onSelectionModelChange={(newSelectionModel) =>
-            setSelectionModel(newSelectionModel)
-          }
+          // pagination
+          // pageSize={10}
+          // selectionModel={selectionModel}
+          // onSelectionModelChange={(newSelectionModel: any) =>
+          //   setSelectionModel(newSelectionModel)
+          // }
           onCellClick={handleCellClick}
         />
       </div>

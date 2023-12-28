@@ -3,26 +3,24 @@ import "./App.css";
 import Table from "./components/pages/Table";
 import Add from "./components/pages/Add";
 import Edit from "./components/pages/Edit";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Dashboard from "./components/dashboard/Dashboard";
 import PageNotFound from "./components/auth/PageNotFound";
 import Login from "./components/auth/Login";
 import MyContext from "./context/context";
-import Register from "./components/Register";
 
-export const useAuth = () => {
-  return useContext(MyContext);
-};
 const App: React.FC = () => {
   const handleSubmit = (token: string) => {
-    setToken(token);
+    if (token) {
+      setToken(token);
+    }
   };
 
-  const [token, setTokenState] = useState<string | null>(() => {
+  const [token, setTokenState] = useState(() => {
     return localStorage.getItem("token");
   });
 
-  const setToken = (newToken: string | null) => {
+  const setToken = (newToken: string) => {
     setTokenState(newToken);
     if (newToken) {
       localStorage.setItem("token", newToken);
@@ -41,7 +39,6 @@ const App: React.FC = () => {
                 path="/"
                 element={<Login sendToken={handleSubmit} />}
               ></Route>
-              <Route path="/unit" element={<Register />}></Route>
               <Route path="/dashboard" element={<Dashboard />}></Route>
               <Route path="/table" element={<Table />}></Route>
               <Route path="/add" element={<Add />}></Route>

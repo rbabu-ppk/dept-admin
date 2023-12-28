@@ -1,11 +1,9 @@
 import axios from "axios";
-// import { token } from "../tokens/authToken";
-import { AddFormData } from "../types/deptAdminType";
-import { useAuth } from "../App";
+import { CreateFormData, PutFormData } from "../types/deptAdminType";
 
 const baseUrl = "https://dev-admin.sunrises.io/api";
 
-export const createData = async (data: AddFormData, token: string) => {
+export const createData = async (data: CreateFormData, token: string) => {
   try {
     const url = `${baseUrl}/create-departadmin`;
     const response = await axios.post(url, data, {
@@ -48,7 +46,7 @@ export const showData = async (token: string) => {
   }
 };
 
-export const updateData = async (data: FormData, token: string) => {
+export const updateData = async (data: PutFormData, token: string) => {
   try {
     const response = await axios.put(baseUrl + `/edit-departadmin`, data, {
       headers: {

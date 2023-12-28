@@ -1,4 +1,4 @@
-import React, { FormEvent, useContext, useEffect } from "react";
+import React, { ChangeEvent, FormEvent, useContext, useEffect } from "react";
 import {
   TextField,
   Checkbox,
@@ -6,22 +6,21 @@ import {
   FormControlLabel,
   FormGroup,
   Button,
-  Box,
   Typography,
   Grid,
   Divider,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import * as api from "../../services/apiServices";
-import { Errors } from "../../types/deptAdminType";
-import { FormData } from "../../types/deptAdminType";
+import { EditErrors, Errors, UpdateFormData } from "../../types/deptAdminType";
 import Layout from "../layouts/Layout";
 import MyContext from "../../context/context";
-import { validateForm } from "../../validations/formValidate";
 
 const Add = () => {
   const { selectedId } = useParams();
-  const [formData, setFormData] = React.useState<FormData>({
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = React.useState<UpdateFormData>({
     firstname: "",
     middlename: "",
     lastname: "",
@@ -31,23 +30,81 @@ const Add = () => {
     password: "",
     repeatPassword: "",
     instructor: false,
-    _id: selectedId,
+    _id: "",
   });
 
-  const [errors, setErrors] = React.useState<Errors>({});
-  const navigate = useNavigate();
-  const { token } = useContext(MyContext);
+  const [errors, setErrors] = React.useState<EditErrors>({
+    firstname: "",
+    middlename: "",
+    lastname: "",
+    email: "",
+    // loginsso: "",
+    password: "",
+    repeatPassword: "",
+    // instructor: "",
+  });
 
-  const handleChange = (e) => {
+  const [isFormValid, setIsFormValid] = React.useState(false);
+
+  const { token } = useContext(MyContext);
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors: Errors = {
+      firstname: "",
+      middlename: "",
+      lastname: "",
+      email: "",
+      password: "",
+      repeatPassword: "",
+    };
+    if (formData.firstname.trim() === "") {
+      newErrors.firstname = "First name is required";
+      isValid = false;
+    }
+    if (formData.lastname.trim() === "") {
+      newErrors.lastname = "Last name is required";
+      isValid = false;
+    }
+    if (formData.middlename.trim() === "") {
+      newErrors.middlename = "Middle name is required";
+      isValid = false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      newErrors.email = "Invalid email address";
+      isValid = false;
+    }
+
+    if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters long";
+      isValid = false;
+    }
+    if (formData.password !== formData.repeatPassword) {
+      newErrors.repeatPassword = "Password mismatch";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    setIsFormValid(isValid);
+    return isValid;
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: type === "checkbox" ? checked : value,
     }));
+
+    validateForm();
   };
 
   useEffect(() => {
-    const fetchData = async (selectedId, token) => {
+    if (selectedId === undefined) {
+      return;
+    }
+    const fetchData = async (selectedId: string, token: string) => {
       try {
         const result = await api.showIdData(selectedId, token);
         setFormData(result);
@@ -60,28 +117,17 @@ const Add = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const errors = validateForm(formData);
 
-    if (Object.keys(errors).length === 0) {
-      const { repeatPassword, ...formDataWithoutRepeatPassword } = formData;
+    const { repeatPassword, ...formDataWithoutRepeatPassword } = formData;
 
-      try {
-        const result = await api.updateData(
-          formDataWithoutRepeatPassword,
-          token
-        );
-        navigate("/table");
-        console.log("Data Updated", result);
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      setErrors(errors);
+    try {
+      const result = await api.updateData(formDataWithoutRepeatPassword, token);
+      navigate("/table");
+      console.log("Data Updated", result);
+    } catch (error) {
+      console.log(error);
     }
   };
-  const isSubmitDisabled = Object.values(formData).some(
-    (value) => value === ""
-  );
 
   return (
     <Layout>
@@ -98,6 +144,7 @@ const Add = () => {
               </Typography>
               <TextField
                 id="firstName"
+                size="small"
                 name="firstname"
                 value={formData.firstname}
                 onChange={handleChange}
@@ -116,6 +163,7 @@ const Add = () => {
               <TextField
                 id="middleName"
                 name="middlename"
+                size="small"
                 value={formData.middlename}
                 onChange={handleChange}
                 fullWidth
@@ -131,6 +179,7 @@ const Add = () => {
               </Typography>
               <TextField
                 id="middleName"
+                size="small"
                 name="lastname"
                 value={formData.lastname}
                 onChange={handleChange}
@@ -148,12 +197,13 @@ const Add = () => {
               <TextField
                 type="text"
                 id="username"
+                size="small"
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
                 fullWidth
                 error={Boolean(errors.username)}
-                helperText={errors.userame}
+                helperText={errors.username}
               />
             </FormControl>
           </Grid>
@@ -164,6 +214,7 @@ const Add = () => {
               </Typography>
               <TextField
                 type="email"
+                size="small"
                 id="email"
                 name="email"
                 value={formData.email}
@@ -183,6 +234,7 @@ const Add = () => {
                 </Typography>
                 <TextField
                   type="password"
+                  size="small"
                   id="newPassword"
                   name="password"
                   // value={formData.password}
@@ -202,6 +254,7 @@ const Add = () => {
                   type="password"
                   id="repeatPassword"
                   name="repeatPassword"
+                  size="small"
                   // value={formData.repeatPassword}
                   onChange={handleChange}
                   fullWidth
@@ -223,6 +276,7 @@ const Add = () => {
                     <Checkbox
                       id="isInstructor"
                       name="instructor"
+                      size="small"
                       checked={formData.instructor}
                       onChange={handleChange}
                     />
@@ -239,7 +293,7 @@ const Add = () => {
                 variant="contained"
                 color="primary"
                 fullWidth
-                disabled={isSubmitDisabled}
+                disabled={!isFormValid}
               >
                 Submit
               </Button>
