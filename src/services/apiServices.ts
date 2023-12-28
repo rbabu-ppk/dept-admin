@@ -76,3 +76,16 @@ export const deleteData = async (id: string, token: string) => {
     console.log(error);
   }
 };
+
+export const showDashboard = async (token: string) => {
+  try {
+    const response = await axios.get(baseUrl + "/dashboard", {
+      headers: {
+        Authorization: `${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
