@@ -19,7 +19,6 @@ const columns: GridColDef[] = [
 const Table: React.FC = () => {
   const [datas, setDatas] = useState<any[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  // const [selectionModel, setSelectionModel] = React.useState([]);
 
   const { token } = useContext(MyContext);
 
@@ -29,7 +28,7 @@ const Table: React.FC = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (token: string | null) => {
       try {
         const response = await api.showData(token);
         const formattedData = Object.values(response).map((obj: any) => ({
@@ -41,7 +40,7 @@ const Table: React.FC = () => {
         console.log(error);
       }
     };
-    fetchData();
+    fetchData(token);
   }, []);
 
   const handleDelete = async () => {

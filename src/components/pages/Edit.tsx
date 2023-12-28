@@ -104,7 +104,7 @@ const Add = () => {
     if (selectedId === undefined) {
       return;
     }
-    const fetchData = async (selectedId: string, token: string) => {
+    const fetchData = async (selectedId: string, token: string | null) => {
       try {
         const result = await api.showIdData(selectedId, token);
         setFormData(result);

@@ -1,6 +1,4 @@
-import { createContext, useContext } from "react";
-
-// const MyContext = createContext({ token: "" });
+import { createContext } from "react";
 
 interface MyContextProps {
   token: string | null;
@@ -9,7 +7,3 @@ interface MyContextProps {
 const MyContext = createContext<MyContextProps>({ token: "" });
 
 export default MyContext;
-
-export const useAuth = () => {
-  return useContext(MyContext);
-};
