@@ -16,7 +16,7 @@ import { EditErrors, Errors, UpdateFormData } from "../../types/deptAdminType";
 import Layout from "../layouts/Layout";
 import MyContext from "../../context/context";
 
-const Add = () => {
+const Edit = () => {
   const { selectedId } = useParams();
   const navigate = useNavigate();
 
@@ -305,4 +305,4 @@ const Add = () => {
   );
 };
 
-export default Add;
+export default Edit;

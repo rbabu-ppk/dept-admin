@@ -127,6 +127,7 @@ const Add = () => {
               <TextField
                 id="firstName"
                 name="firstname"
+                label="First Name"
                 size="small"
                 value={formData.firstname}
                 onChange={handleChange}
@@ -144,6 +145,7 @@ const Add = () => {
               </Typography>
               <TextField
                 id="middleName"
+                label="Middle Name"
                 size="small"
                 name="middlename"
                 value={formData.middlename}
@@ -160,8 +162,9 @@ const Add = () => {
                 Last Name
               </Typography>
               <TextField
-                id="middleName"
+                id="lastname"
                 size="small"
+                label="Last Name"
                 name="lastname"
                 value={formData.lastname}
                 onChange={handleChange}
@@ -180,6 +183,7 @@ const Add = () => {
                 type="email"
                 id="email"
                 name="email"
+                label="Email"
                 size="small"
                 value={formData.email}
                 onChange={handleChange}
@@ -223,6 +227,7 @@ const Add = () => {
                     id="newPassword"
                     name="password"
                     size="small"
+                    label="New Password"
                     value={formData.password}
                     onChange={handleChange}
                     fullWidth
@@ -240,6 +245,7 @@ const Add = () => {
                     type="password"
                     size="small"
                     id="repeatPassword"
+                    label="Repeat Password"
                     name="repeatPassword"
                     value={formData.repeatPassword}
                     onChange={handleChange}
@@ -253,9 +259,9 @@ const Add = () => {
           )}
           <Grid item xs={12} sm={12}>
             <FormControl fullWidth>
-              <Typography variant="body2" mb={1}>
+              {/* <Typography variant="body2" mb={1}>
                 Is Instructor
-              </Typography>
+              </Typography> */}
               <FormGroup>
                 <FormControlLabel
                   control={
